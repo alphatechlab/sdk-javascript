@@ -12,8 +12,8 @@ alphatech.configure = function (config = {}) {
   };
 };
 
-alphatech.drive = { files: {} };
-alphatech.drive.files.upload = async function (file, options = {}) {
+alphatech.storage = { files: {} };
+alphatech.storage.files.upload = async function (file, options = {}) {
   try {
     if (!alphatech.config) {
       throw new Error("[alphatech] Not configured");
@@ -38,7 +38,7 @@ alphatech.drive.files.upload = async function (file, options = {}) {
     }
 
     const response = await got
-      .post(`${alphatech.config.domain}/drive/files/upload`, {
+      .post(`${alphatech.config.domain}/storage/files/upload`, {
         body: form,
         headers: {
           "x-alphatech-javascript-version": package.version,

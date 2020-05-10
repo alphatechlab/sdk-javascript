@@ -25,7 +25,7 @@ app.get("/", function (req, res) {
 app.post("/upload", upload.single("file"), async function (req, res) {
   try {
     if (req.file) {
-      const response = await alphatech.drive.files.upload(
+      const response = await alphatech.storage.files.upload(
         req.file.path || req.file.buffer,
         {
           path: `/uploaded/${req.file.originalname}`,
