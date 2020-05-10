@@ -8,7 +8,7 @@ const alphatech = {};
 alphatech.configure = function (config = {}) {
   alphatech.config = {
     ...config,
-    domain: `https://dev-api.alpha.tech`,
+    domain: `https://api.alpha.tech`,
   };
 };
 8;
