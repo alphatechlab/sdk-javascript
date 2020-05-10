@@ -11,7 +11,6 @@ alphatech.configure = function (config = {}) {
     domain: `https://api.alpha.tech`,
   };
 };
-8;
 
 alphatech.drive = { files: {} };
 alphatech.drive.files.upload = async function (file, options = {}) {
