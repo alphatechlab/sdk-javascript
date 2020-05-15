@@ -25,21 +25,19 @@ app.get("/", function (req, res) {
 app.post("/upload", upload.single("file"), async function (req, res) {
   try {
     if (req.file) {
-      const response = await alphatech.storage.files.upload(
-        req.file.path || req.file.buffer,
-        {
-          path: `/uploaded/${req.file.originalname}`,
-          metadata: {
-            userId: "123",
-          },
-        }
-      );
+      const file = req.file.path || req.file.buffer;
+      const response = await alphatech.storage.files.upload(file, {
+        path: `/uploaded/${req.file.originalname}`,
+        metadata: {
+          userId: "123",
+        },
+      });
       return res.json(response);
     } else {
       return res.status(400).json({ error: "File is missing" });
     }
   } catch (err) {
-    // console.error(err);
+    console.error({ err });
     return res.status(400).json({ error: "An error occurred" });
   }
 });
