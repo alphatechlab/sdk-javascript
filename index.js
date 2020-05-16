@@ -64,21 +64,13 @@ alphatech.storage.files.upload = async function (file, options = {}) {
       throw new Error("[alphatech] `path` is missing");
     }
 
-    const {
-      contentLength,
-      contentType,
-      metadata: metadataToSend,
-    } = await getFileInfo(file, options.path);
+    const fileInfo = await getFileInfo(file, options.path);
 
     const {
       url,
       metadata,
       signature,
-    } = await alphatech.storage.files._requestUpload(options.path, {
-      contentLength,
-      contentType,
-      metadata: metadataToSend,
-    });
+    } = await alphatech.storage.files._requestUpload(options.path, fileInfo);
 
     console.log(Object.keys(signature.fields));
 
@@ -91,8 +83,8 @@ alphatech.storage.files.upload = async function (file, options = {}) {
     return {
       // need ObjectId and other data...
       url,
-      size: contentLength,
-      type: contentType,
+      size: fileInfo.contentLength,
+      type: fileInfo.contentType,
       // md5: contentMd5,
       metadata,
     };

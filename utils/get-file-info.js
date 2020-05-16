@@ -8,8 +8,6 @@ module.exports = async function getFileInfo(file, path) {
   let contentType = "application/octet-stream";
   let metadata = {};
 
-  const start = Date.now();
-
   try {
     let buffer;
     if (typeof file === "string") {
@@ -37,9 +35,6 @@ module.exports = async function getFileInfo(file, path) {
   } catch (err) {
     console.log({ err });
   } finally {
-    const millis = Date.now() - start;
-    console.log(`seconds elapsed = ${Math.floor(millis / 1000)}`);
-
     return {
       contentLength,
       contentType,
