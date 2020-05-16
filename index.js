@@ -10,6 +10,7 @@ alphatech.configure = function (config = {}) {
   alphatech.config = {
     ...config,
     domain: `https://dev-api.alpha.tech`,
+    // domain: `http://localhost:3000/dev`,
   };
 };
 
@@ -20,8 +21,7 @@ alphatech.storage.files._requestUpload = async function (path, json) {
     {
       json: {
         path,
-        contentLength: json.contentLength,
-        contentType: json.contentType,
+        ...json,
       },
       responseType: "json",
       headers: {
@@ -31,8 +31,6 @@ alphatech.storage.files._requestUpload = async function (path, json) {
     }
   );
 
-  console.log({ body });
-
   if (!body.url) {
     throw new Error("[alphatech] Upload request failed");
   }
@@ -40,31 +38,17 @@ alphatech.storage.files._requestUpload = async function (path, json) {
   return body;
 };
 
-alphatech.storage.files._getFormData = function (
-  file,
-  fields = {},
-  payload = {}
-) {
+alphatech.storage.files._getFormData = function (file, fields = {}) {
   const form = new FormData();
 
   for (const [key, value] of Object.entries(fields)) {
     form.append(key, value);
   }
 
-  // for (const [key, value] of Object.entries(payload)) {
-  //   const name = `x-amz-meta-${key.toLowerCase()}`;
-  //   if (typeof value === "string") {
-  //     form.append(name, value);
-  //   } else {
-  //     form.append(name, JSON.stringify(value));
-  //   }
-  // }
-
-  if (typeof file === "string") {
-    form.append("file", fs.createReadStream(file));
-  } else {
-    form.append("file", file);
-  }
+  form.append(
+    "file",
+    typeof file === "string" ? fs.createReadStream(file) : file
+  );
 
   return form;
 };
@@ -80,44 +64,38 @@ alphatech.storage.files.upload = async function (file, options = {}) {
       throw new Error("[alphatech] `path` is missing");
     }
 
-    options.metadata = options.metadata || {};
+    const {
+      contentLength,
+      contentType,
+      metadata: metadataToSend,
+    } = await getFileInfo(file, options.path);
 
-    const { contentType, contentLength, dimensions } = await getFileInfo(file);
-    // console.log({ contentLength });
-    // console.log({ contentType });
-    // console.log({ dimensions });
-
-    const signedRequest = await alphatech.storage.files._requestUpload(
-      options.path,
-      {
-        contentLength,
-        contentType,
-      }
-    );
-
-    const form = alphatech.storage.files._getFormData(
-      file,
-      signedRequest.fields,
-      {
-        contentType,
-        metadata: {
-          ...options.metadata,
-          ...dimensions,
-        },
-      }
-    );
-
-    console.log(Object.keys(signedRequest.fields));
-
-    await got.post(signedRequest.url, {
-      body: form,
-      // headers: {
-      //   "Content-Type": false,
-      //   // "Content-Length": contentLength,
-      // },
+    const {
+      url,
+      metadata,
+      signature,
+    } = await alphatech.storage.files._requestUpload(options.path, {
+      contentLength,
+      contentType,
+      metadata: metadataToSend,
     });
 
-    return signedRequest;
+    console.log(Object.keys(signature.fields));
+
+    const form = alphatech.storage.files._getFormData(file, signature.fields);
+
+    await got.post(signature.url, {
+      body: form,
+    });
+
+    return {
+      // need ObjectId and other data...
+      url,
+      size: contentLength,
+      type: contentType,
+      // md5: contentMd5,
+      metadata,
+    };
   } catch (err) {
     throw err;
   }

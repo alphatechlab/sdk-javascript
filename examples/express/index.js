@@ -28,9 +28,6 @@ app.post("/upload", upload.single("file"), async function (req, res) {
       const file = req.file.path || req.file.buffer;
       const response = await alphatech.storage.files.upload(file, {
         path: `/uploaded/${req.file.originalname}`,
-        metadata: {
-          userId: "123",
-        },
       });
       return res.json(response);
     } else {
