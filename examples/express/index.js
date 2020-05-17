@@ -11,7 +11,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Using filesystem :
-// const upload = multer({ dest: "uploads" });
+// const upload = multer({ dest: 'uploads' });
 
 alphatech.setConfig({
   token: process.env.TOKEN,
@@ -33,8 +33,8 @@ app.post('/upload', upload.single('file'), async function uploadRoute(req, res) 
     }
     return res.status(400).json({ error: 'File is missing' });
   } catch (err) {
-    // console.error({ err });
-    return res.status(400).json({ error: 'An error occurred' });
+    console.error({ err });
+    return res.status(400).json({ error: err.message });
   }
 });
 
