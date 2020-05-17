@@ -17,13 +17,20 @@ module.exports.upload = wrapper(async function upload(file, options = {}) {
 
   const form = getFormData(signature.fields, file, createdFile);
 
-  const { body } = await got.post(signature.url, {
+  const { body, headers } = await got.post(signature.url, {
     body: form,
   });
 
-  const matched = body.match(/(?<=<Etag>)(.*)(?=<\/Etag>)/);
-  // eslint-disable-next-line no-unneeded-ternary
-  const [etag] = matched ? matched : [];
+  let etag;
+  if (headers.etag) {
+    // prod
+    etag = headers.etag.replace(/"/g, '');
+  } else {
+    // local
+    const matched = body.match(/(?<=<Etag>)(.*)(?=<\/Etag>)/);
+    // eslint-disable-next-line no-unneeded-ternary
+    [etag] = matched ? matched : [];
+  }
 
   return {
     ...createdFile,
