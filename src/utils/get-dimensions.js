@@ -1,6 +1,6 @@
-const sizeOf = require("image-size");
+const sizeOf = require('image-size');
 
-module.exports = function getDimensions(file) {
+module.exports.getDimensions = function getDimensions(file) {
   try {
     const dimensions = sizeOf(file);
     return {
