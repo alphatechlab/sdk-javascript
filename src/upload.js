@@ -15,11 +15,18 @@ module.exports.upload = wrapper(async function upload(file, options = {}) {
 
   const { file: createdFile, signature } = await requestUpload(options.path, fileInfo);
 
-  const form = getFormData(file, signature.fields);
+  const form = getFormData(signature.fields, file, createdFile);
 
-  await got.post(signature.url, {
+  const { body } = await got.post(signature.url, {
     body: form,
   });
 
-  return createdFile;
+  const matched = body.match(/(?<=<Etag>)(.*)(?=<\/Etag>)/);
+  // eslint-disable-next-line no-unneeded-ternary
+  const [etag] = matched ? matched : [];
+
+  return {
+    ...createdFile,
+    etag,
+  };
 });

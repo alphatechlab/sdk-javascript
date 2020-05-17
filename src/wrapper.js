@@ -9,7 +9,11 @@ module.exports.wrapper = function wrapper(func) {
       }
       return await func(...args);
     } catch (err) {
-      err.message = `[alphatech] ${err.message}`;
+      if (err.response && err.response.body) {
+        err.message = `[alphatech] ${err.response.body.error}`;
+      } else {
+        err.message = `[alphatech] ${err.message}`;
+      }
       throw err;
     }
   };
