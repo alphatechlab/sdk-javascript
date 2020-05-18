@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const multer = require('multer');
-const alphatech = require('../../index');
+const alphatech = require('../../');
 
 const app = express();
 
