@@ -27,8 +27,6 @@ app.get('/', function defaultRoute(req, res) {
 
 app.post('/get-pdf', async function getPdfRoute(req, res) {
   try {
-    console.log(req.body);
-
     // Size limit 5Mb
     // @todo check size
     const response = await alphatech.getPdf(lists({ name: 'John' }), {
