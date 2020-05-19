@@ -4,6 +4,8 @@ const express = require('express');
 const multer = require('multer');
 const alphatech = require('../../');
 
+const lists = require('./pdf-templates/lists');
+
 const app = express();
 app.use(express.json());
 
@@ -27,7 +29,13 @@ app.post('/get-pdf', async function getPdfRoute(req, res) {
   try {
     console.log(req.body);
 
-    return res.json('Hello World');
+    // Size limit 5Mb
+    // @todo check size
+    const response = await alphatech.getPdf(lists({ name: 'John' }), {
+      path: `/pdf/hello-world.pdf`,
+    });
+
+    return res.json(response);
   } catch (err) {
     console.error({ err });
     return res.status(400).json({ error: err.message });
