@@ -5,6 +5,7 @@ const multer = require('multer');
 const alphatech = require('../../');
 
 const app = express();
+app.use(express.json());
 
 // Using buffer :
 const storage = multer.memoryStorage();
@@ -20,6 +21,17 @@ alphatech.setConfig({
 
 app.get('/', function defaultRoute(req, res) {
   res.json('Hello World');
+});
+
+app.post('/get-pdf', async function getPdfRoute(req, res) {
+  try {
+    console.log(req.body);
+
+    return res.json('Hello World');
+  } catch (err) {
+    console.error({ err });
+    return res.status(400).json({ error: err.message });
+  }
 });
 
 app.post('/upload', upload.single('file'), async function uploadRoute(req, res) {
