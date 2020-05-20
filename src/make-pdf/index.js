@@ -1,10 +1,10 @@
 const { api } = require('../utils');
 const { wrapper } = require('../wrapper');
 
-module.exports.getPdf = wrapper(async function getPdf(content, options = {}) {
+module.exports.makePdf = wrapper(async function makePdf(content, options = {}) {
   const { path } = options;
 
-  const { body } = await api.post('/pdf/get', {
+  const { body } = await api.post('/pdf/make', {
     json: {
       path,
       content,
