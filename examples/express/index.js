@@ -25,11 +25,11 @@ app.get('/', function defaultRoute(req, res) {
   res.json('Hello World');
 });
 
-app.post('/get-pdf', async function getPdfRoute(req, res) {
+app.post('/make-pdf', async function makePdfRoute(req, res) {
   try {
     // Size limit 5Mb
     // @todo check size
-    const response = await alphatech.getPdf(lists({ name: 'John' }), {
+    const response = await alphatech.makePdf(lists({ name: 'John' }), {
       path: `/pdf/hello-world.pdf`,
     });
 
