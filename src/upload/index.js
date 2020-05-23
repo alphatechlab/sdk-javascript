@@ -1,19 +1,19 @@
 const got = require('got');
-const { requestUpload, getFormData } = require('./storage');
-const { getFileInfo } = require('./utils/get-file-info');
-const { wrapper } = require('./wrapper');
+const { getFormData } = require('./get-form-data');
+const { requestUpload } = require('./request-upload.js');
+const { getFileInfo } = require('../utils/get-file-info');
+const { wrapper } = require('../wrapper');
 
 module.exports.upload = wrapper(async function upload(file, options = {}) {
   if (!file) {
     throw new Error('`file` is missing');
   }
-  if (!options.path) {
-    throw new Error('`path` is missing');
-  }
 
-  const fileInfo = await getFileInfo(file, options.path);
+  const { path = '/' } = options;
 
-  const { file: createdFile, signature } = await requestUpload(options.path, fileInfo);
+  const fileInfo = await getFileInfo(file, path);
+
+  const { file: createdFile, signature } = await requestUpload(path, fileInfo);
 
   const form = getFormData(signature.fields, file, createdFile);
 

@@ -1,7 +1,7 @@
-const { api } = require('../utils/api');
+const { api } = require('../utils');
 
 module.exports.requestUpload = async function requestUpload(path, json) {
-  const { body } = await api.post('/storage/files/request-upload', {
+  const { body } = await api.post('/file/request-upload', {
     json: {
       path,
       ...json,
