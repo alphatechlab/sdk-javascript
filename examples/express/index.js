@@ -2,9 +2,9 @@ require('dotenv').config();
 
 const express = require('express');
 const multer = require('multer');
-const alphatech = require('../../');
+const alphatech = require('../..');
 
-const lists = require('./pdf-templates/lists');
+const helloTpl = require('./pdf-templates/hello');
 
 const app = express();
 app.use(express.json());
@@ -27,9 +27,7 @@ app.get('/', function defaultRoute(req, res) {
 
 app.post('/make-pdf', async function makePdfRoute(req, res) {
   try {
-    // Size limit 5Mb
-    // @todo check size
-    const response = await alphatech.makePdf(lists({ name: 'John' }), {
+    const response = await alphatech.makePdf(helloTpl({ name: 'John' }), {
       path: `/pdf/hello-world.pdf`,
     });
 
