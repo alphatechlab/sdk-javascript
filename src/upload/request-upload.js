@@ -1,17 +1,14 @@
 const { api } = require('../utils');
 
-module.exports.requestUpload = async function requestUpload(path, json) {
-  const { body } = await api.post('/file/request-upload', {
-    json: {
-      path,
-      ...json,
-    },
-    responseType: 'json',
+module.exports.requestUpload = async function requestUpload(path, params) {
+  const { data } = await api.post('/file/request-upload', {
+    ...params,
+    path,
   });
 
-  if (!body.signature) {
+  if (!data.signature) {
     throw new Error('Upload request failed');
   }
 
-  return body;
+  return data;
 };
