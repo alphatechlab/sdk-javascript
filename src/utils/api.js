@@ -1,14 +1,12 @@
-const got = require('got');
+const axios = require('axios');
 const { getConfig } = require('../config');
 
 module.exports.api = {
-  post: function post(url, options) {
+  post: function post(url, params) {
     const { domain, version, token, teamId } = getConfig();
 
-    return got.post(`${domain}${url}`, {
-      ...options,
+    return axios.post(`${domain}${url}`, params, {
       headers: {
-        ...(options.headers || {}),
         'x-alphatech-javascript-version': version,
         authorization: `Bearer ${token}.${teamId}`,
       },
