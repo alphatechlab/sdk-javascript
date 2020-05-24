@@ -17,7 +17,7 @@ module.exports.upload = wrapper(async function upload(file, options = {}) {
 
   const form = getFormData(signature.fields, file, createdFile);
 
-  const { body, headers } = await axios.post(signature.url, form, {
+  const { data, headers } = await axios.post(signature.url, form, {
     headers: {
       ...form.getHeaders(),
       'Content-Length': form.getLengthSync(),
@@ -30,7 +30,7 @@ module.exports.upload = wrapper(async function upload(file, options = {}) {
     etag = headers.etag.replace(/"/g, '');
   } else {
     // local
-    const matched = body.match(/(?<=<Etag>)(.*)(?=<\/Etag>)/);
+    const matched = data.match(/(?<=<Etag>)(.*)(?=<\/Etag>)/);
     // eslint-disable-next-line no-unneeded-ternary
     [etag] = matched ? matched : [];
   }
