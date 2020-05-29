@@ -1,0 +1,2 @@
+- config.domain
+- version

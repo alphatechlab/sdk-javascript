@@ -1,10 +1,10 @@
 const { setConfig, getConfig } = require('./src/config');
-const { upload } = require('./src/upload');
-const { makePdf } = require('./src/make-pdf');
+const file = require('./src/file');
+const pdf = require('./src/pdf');
 
 module.exports = {
   setConfig,
   getConfig,
-  upload,
-  makePdf,
+  file,
+  pdf,
 };

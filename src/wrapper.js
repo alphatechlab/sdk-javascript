@@ -9,9 +9,9 @@ module.exports.wrapper = function wrapper(func) {
       }
       return await func(...args);
     } catch (err) {
-      if (err.response && err.response.body) {
-        err.message = `[alphatech] ${err.response.statusCode} ${
-          err.response.body.error || err.response.body.message || err.response.statusMessage
+      if (err.response && err.response.data) {
+        err.message = `[alphatech] ${err.response.status} ${
+          err.response.data.error || err.response.data.message || err.response.statusText
         }`;
       } else {
         err.message = `[alphatech] ${err.message}`;
