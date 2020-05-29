@@ -4,7 +4,9 @@ let config = {
   token: '',
   teamId: '',
   version: pkg.version,
-  domain: 'https://api.alpha.tech',
+  // domain: 'https://api.alpha.tech',
+  // domain: 'https://dev-api.alpha.tech',
+  domain: 'http://localhost:3000/dev',
 };
 
 module.exports.setConfig = function setConfig(options = {}) {

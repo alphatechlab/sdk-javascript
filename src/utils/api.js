@@ -1,15 +1,21 @@
 const axios = require('axios');
 const { getConfig } = require('../config');
 
-module.exports.api = {
-  post: function post(url, params) {
-    const { domain, version, token, teamId } = getConfig();
+module.exports.api = async function api(request, params = {}) {
+  const { url, method } = request;
+  const { domain, version, token, teamId } = getConfig();
 
-    return axios.post(`${domain}${url}`, params, {
+  return (
+    await axios({
+      url: `${domain}${url}`,
+      method,
+      data: {
+        ...params,
+      },
       headers: {
         'x-alphatech-javascript-version': version,
         authorization: `Bearer ${token}.${teamId}`,
       },
-    });
-  },
+    })
+  ).data;
 };
