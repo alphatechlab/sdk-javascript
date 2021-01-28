@@ -33,6 +33,7 @@ module.exports.upload = wrapper(async function upload(file, options = {}) {
   const form = getFormData(signature.fields, file, createdFile);
 
   const { data, headers } = await axios.post(signature.url, form, {
+    maxBodyLength: Infinity,
     headers: {
       ...form.getHeaders(),
       'Content-Length': form.getLengthSync(),
